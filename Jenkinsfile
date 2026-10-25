@@ -25,7 +25,7 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t ruchita13/smart-lost-found:latest .'
+                sh '/mnt/c/Users/yashp/AppData/Local/Programs/DockerDesktop/resources/bin/docker.exe build -t ruchita13/smart-lost-found:latest .'
             }
         }
 
@@ -37,9 +37,9 @@ pipeline {
                     passwordVariable: 'DOCKER_PASSWORD'
                 )]) {
                     sh '''
-                        echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USER" --password-stdin
-                        docker push ruchita13/smart-lost-found:latest
-                        docker logout
+                         echo "$DOCKER_PASSWORD" | /mnt/c/Users/yashp/AppData/Local/Programs/DockerDesktop/resources/bin/docker.exe login -u "$DOCKER_USER" --password-stdin
+                        /mnt/c/Users/yashp/AppData/Local/Programs/DockerDesktop/resources/bin/docker.exe push ruchita13/smart-lost-found:latest
+                        /mnt/c/Users/yashp/AppData/Local/Programs/DockerDesktop/resources/bin/docker.exe logout
                     '''
                 }
             }
