@@ -22,5 +22,27 @@ pipeline {
                 sh 'venv/bin/pytest -v'
             }
         }
+
+        stage('Build Docker Image') {
+            steps {
+                sh 'docker build -t ruchita13/smart-lost-found:latest .'
+            }
+        }
+
+        stage('Push to Docker Hub') {
+            steps {
+                withCredentials([usernamePassword(
+                    credentialsId: 'dockerhub-creds',
+                    usernameVariable: 'DOCKER_USER',
+                    passwordVariable: 'DOCKER_PASSWORD'
+                )]) {
+                    sh '''
+                        echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USER" --password-stdin
+                        docker push ruchita13/smart-lost-found:latest
+                        docker logout
+                    '''
+                }
+            }
+        }
     }
 }
