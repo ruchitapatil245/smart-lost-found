@@ -1,0 +1,6 @@
+
+venv/
+__pycache__/
+*.pyc
+minikube-linux-amd64
+.env

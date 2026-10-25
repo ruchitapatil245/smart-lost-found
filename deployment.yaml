@@ -1,0 +1,32 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lost-found-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: lost-found
+  template:
+    metadata:
+      labels:
+        app: lost-found
+    spec:
+      containers:
+        - name: lost-found
+          image: ruchita13/smart-lost-found:latest
+          ports:
+            - containerPort: 5000
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 5000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 5000
+            initialDelaySeconds: 10
+            periodSeconds: 20
