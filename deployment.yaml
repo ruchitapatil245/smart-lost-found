@@ -16,6 +16,7 @@ spec:
       containers:
         - name: lost-found
           image: ruchita13/smart-lost-found:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 5000
           readinessProbe:
