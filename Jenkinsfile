@@ -37,11 +37,23 @@ pipeline {
                     passwordVariable: 'DOCKER_PASSWORD'
                 )]) {
                     sh '''
-                         echo "$DOCKER_PASSWORD" | /mnt/c/Users/yashp/AppData/Local/Programs/DockerDesktop/resources/bin/docker.exe login -u "$DOCKER_USER" --password-stdin
+                        echo "$DOCKER_PASSWORD" | /mnt/c/Users/yashp/AppData/Local/Programs/DockerDesktop/resources/bin/docker.exe login -u "$DOCKER_USER" --password-stdin
                         /mnt/c/Users/yashp/AppData/Local/Programs/DockerDesktop/resources/bin/docker.exe push ruchita13/smart-lost-found:latest
                         /mnt/c/Users/yashp/AppData/Local/Programs/DockerDesktop/resources/bin/docker.exe logout
                     '''
                 }
+            }
+        }
+
+        stage('Deploy to Kubernetes') {
+            steps {
+                sh '''
+                    export KUBECONFIG=/var/lib/jenkins/.kube/config
+                    kubectl apply -f deployment.yaml
+                    kubectl apply -f service.yaml
+                    kubectl rollout restart deployment/lost-found-deployment
+                    kubectl rollout status deployment/lost-found-deployment --timeout=120s
+                '''
             }
         }
     }
